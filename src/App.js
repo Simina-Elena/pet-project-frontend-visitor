@@ -1,25 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import {Route, Switch} from "react-router-dom";
+import Layout from "./components/Layout/Layout";
+import {atom} from "jotai";
+import {AuthService, Register} from "pet-project-frontend-sharedcomponents";
+import "./index.css"
+import LoginVisitor from "./containters/Login/LoginVisitor";
+import Homepage from "./components/Homepage/Homepage";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export const userAtom = atom(AuthService.getCurrentUser() !== null);
+export const nameAtom = atom(AuthService.getCurrentUser() !== null ? AuthService.getCurrentUser().username : "");
+
+export default function App() {
+    return (
+        <Layout>
+            <Switch>
+                <Route exact path="/login" component={LoginVisitor}/>
+                <Route exact path="/" component={Homepage}/>
+                <Route exact path="/register/visitor" component={Register}/>
+            </Switch>
+        </Layout>)
+
 }
-
-export default App;
