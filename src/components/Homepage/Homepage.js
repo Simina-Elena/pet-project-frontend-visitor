@@ -3,12 +3,11 @@ import {CssBaseline} from "@mui/material";
 import Card from "../Card";
 import {useEffect, useState} from "react";
 import axios from "axios";
-import {authHeader, AuthService} from "pet-project-frontend-sharedcomponents";
 
 const useStyles = makeStyles((theme) => ({
     root: {
         minHeight: '100vh',
-        background: `url(${process.env.PUBLIC_URL + '/assets/dogcat11.jpg'})`,
+        background: '#fef9ef',
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
 
@@ -44,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'center',
     },
     title: {
-        color: '#E4BAD4',
+        color: '#fe6d73',
         fontSize: '4.5rem',
         paddingRight: '30px'
 
@@ -58,23 +57,28 @@ const useStyles = makeStyles((theme) => ({
 export default function Homepage() {
     const classes = useStyles()
     const [shelters, setShelters] = useState([])
+    const [loading, setLoading] = useState(true)
 
     const fetchShelters = async () => {
         const data = await axios.get('http://localhost:8080/api/shelter/list')
         const resp = await data.data
         setShelters(resp)
+        setLoading(false)
     }
     useEffect(() => {
         fetchShelters()
     }, [])
 
-    return (
-        <div className={classes.root}>
-            <CssBaseline/>
-            <div className={classes.container}>
-                <h1 className={classes.title}>Shelters</h1>
-                <Card shelters={shelters}/>
+    if (loading === true)
+        return (<div>Loading...</div>)
+    else
+        return (
+            <div className={classes.root}>
+                <CssBaseline/>
+                <div className={classes.container}>
+                    <h1 className={classes.title}>Shelters</h1>
+                    <Card shelters={shelters}/>
+                </div>
             </div>
-        </div>
-    )
+        )
 }

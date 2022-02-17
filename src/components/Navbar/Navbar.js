@@ -9,7 +9,7 @@ import {userAtom} from "../../App";
 const useStyles = makeStyles((theme) => ({
 
     appbar: {
-        background: '#E4BAD4 !important',
+        background: '#17c3b2 !important',
         boxShadow: 'none'
     },
     appbarWrapper: {
@@ -23,13 +23,13 @@ const useStyles = makeStyles((theme) => ({
     },
 
     colorText: {
-        color: '#9c27b0',
+        color: '#ffcb77',
     },
 
     buttonHover: {
         '&:hover': {
-            backgroundColor: '#E4BAD4',
-            color: '#9c89b8',
+            backgroundColor: '#17c3b2',
+            color: '#227c9d',
         },
         fontFamily: 'Nunito',
         color: '#fff',
@@ -38,8 +38,8 @@ const useStyles = makeStyles((theme) => ({
     },
     hover: {
         '&:hover': {
-            backgroundColor: '#E4BAD4',
-            color: '#9c89b8',
+            backgroundColor: '#17c3b2',
+            color: '#227c9d',
         },
 
     }
@@ -81,8 +81,8 @@ export default function Navbar() {
                         {user ? (
                                 <Stack direction="row" spacing={2} padding='10px'>
                                     <Button sx={{'&:hover': {
-                                            backgroundColor: '#E4BAD4',
-                                            color: '#9c89b8',
+                                            backgroundColor: '#17c3b2',
+                                            color: '#227c9d',
                                         }, fontFamily: 'Nunito',
                                         color: '#fff',
                                         fontWeight: 'bold',
@@ -90,8 +90,8 @@ export default function Navbar() {
                                         Profile
                                     </Button>
                                     <Button sx={{'&:hover': {
-                                            backgroundColor: '#E4BAD4',
-                                            color: '#9c89b8',
+                                            backgroundColor: '#17c3b2',
+                                            color: '#227c9d',
                                         },
                                         fontFamily: 'Nunito',
                                         color: '#fff',
