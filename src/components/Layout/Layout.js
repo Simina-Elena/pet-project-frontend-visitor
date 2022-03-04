@@ -5,7 +5,7 @@ export default function Layout(props) {
     return (
         <div className="flex flex-col min-h-screen">
             <Navbar/>
-            <main className="flex-grow bg-background">{props.children}</main>
+            <main className="flex-grow bg-page">{props.children}</main>
             {/*<Footer/>*/}
         </div>
     )

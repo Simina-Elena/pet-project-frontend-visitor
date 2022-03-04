@@ -1,7 +1,7 @@
 import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import axios from "axios";
-import {authHeader} from "pet-project-frontend-sharedcomponents";
+import {authHeader, AuthService} from "pet-project-frontend-sharedcomponents";
 
 export default function ShelterPets() {
     const shelterId = useParams().id
@@ -32,6 +32,15 @@ export default function ShelterPets() {
         getPets()
     }, [])
 
+
+    const handleAdopt = async (petId) => {
+        const visitorId = AuthService.getCurrentUser().id
+        await axios.post(`http://localhost:8080/api/adoptions`, {petId, visitorId}, {headers: authHeader()})
+        console.log(petId)
+        console.log(visitorId)
+    }
+
+
     if (loading === true)
         return (<div>Loading...</div>)
     else
@@ -40,7 +49,7 @@ export default function ShelterPets() {
                 className="min-h-screen bg-page flex justify-center items-center py-20">
                 <div className="md:px-4 md:grid md:grid-cols-2 lg:grid-cols-3 gap-5 space-y-4 md:space-y-0">
                     {pets.map((pet) => (
-                        <div
+                        <div key={pet.id}
                             className="max-w-sm bg-white px-6 pt-6 pb-2 rounded-xl shadow-lg transform hover:scale-105 transition duration-500">
                             <div className="relative">
                                 <img className="w-full rounded-xl"
@@ -78,8 +87,8 @@ export default function ShelterPets() {
                                 </div>
 
                                 <button
-                                    className="mt-4 text-xl w-1/2 text-white bg-gradient-to-r from-baseForGradient to-textColor hover:from-pink-500 hover:to-orange-500 py-2  rounded-xl shadow-lg">
-                                    Adopt
+                                    onClick={() => handleAdopt(pet.id)}
+                                    className="mt-4 text-xl w-1/2 text-white bg-gradient-to-r from-baseForGradient to-textColor hover:from-pink-500 hover:to-orange-500 py-2  rounded-xl shadow-lg">Adopt
                                 </button>
                                 <button
                                     className='mt-4 text-xl w-1/2 text-white bg-gradient-to-r from-baseForGradient to-textColor hover:from-pink-500 hover:to-orange-500 py-2 rounded-xl shadow-lg'>Visit

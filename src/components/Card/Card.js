@@ -20,7 +20,7 @@ export default function Card(props) {
         shelters.map((shelter) => {
             return <section className="text-gray-900 body-font overflow-hidden">
                 <div className="container px-5 py-24 mx-auto">
-                    <div className="lg:w-4/5 mx-auto flex flex-wrap">
+                    <div key={shelter.id} className="lg:w-4/5 mx-auto flex flex-wrap">
                         <img alt="ecommerce"
                              className="lg:w-1/3 w-full lg:h-auto h-64 object-cover object-center rounded"
                              src="https://source.unsplash.com/400x400/?nature,water"/>

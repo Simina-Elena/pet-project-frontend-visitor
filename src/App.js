@@ -4,9 +4,10 @@ import {atom} from "jotai";
 import {AuthService, Register} from "pet-project-frontend-sharedcomponents";
 import "./index.css"
 import LoginVisitor from "./containters/Login/LoginVisitor";
-import Homepage from "./components/Homepage/Homepage";
+import Homepage from "./containters/Homepage/Homepage";
 import ShelterDetails from "./containters/ShelterDetails/ShelterDetails";
 import ShelterPets from "./containters/ShelterPets/ShelterPets";
+import VisitorProfile from "./containters/VisitorProfile/VisitorProfile";
 
 export const userAtom = atom(AuthService.getCurrentUser() !== null);
 export const nameAtom = atom(AuthService.getCurrentUser() !== null ? AuthService.getCurrentUser().username : "");
@@ -21,6 +22,7 @@ export default function App() {
                 <Route exact path="/register/visitor" component={Register}/>
                 <Route exact path="/shelter-details" component={ShelterDetails}/>
                 <Route exact path="/shelter-pets/:id" component={ShelterPets}/>
+                <Route exact path="/profile" component={VisitorProfile}/>
             </Switch>
         </Layout>)
 

@@ -1,6 +1,6 @@
 import {makeStyles} from "@mui/styles";
 import {CssBaseline} from "@mui/material";
-import Card from "../Card";
+import Card from "../../components/Card/Card";
 import {useEffect, useState} from "react";
 import axios from "axios";
 
