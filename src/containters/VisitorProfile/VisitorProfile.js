@@ -13,7 +13,6 @@ export default function VisitorProfile() {
         setUser(resp)
     }
 
-
     useEffect(() => {
         getVisitor()
     }, [])
