@@ -13,6 +13,10 @@ export default function VisitorProfile() {
         setUser(resp)
     }
 
+    const updateUser = (user) => {
+        setUser(user)
+    }
+
     useEffect(() => {
         getVisitor()
     }, [])
@@ -50,7 +54,7 @@ export default function VisitorProfile() {
                     {/*        Something</a>*/}
 
                     {/*</div>*/}
-        <VerticalTabs user={user}/>
+        <VerticalTabs user={user} updateUser={updateUser}/>
             </div>
         </div>
 

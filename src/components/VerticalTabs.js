@@ -13,9 +13,11 @@ import {
     ListItemAvatar,
     Avatar,
     ListItemText,
-    Divider, Modal
+    Divider, Modal, TextField, Button, Grid, FormControl, InputLabel, Select, MenuItem
 } from "@mui/material";
 import {makeStyles} from "@mui/styles";
+import {DatePicker, LocalizationProvider} from "@mui/lab";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
 
 const useStyles = makeStyles({
     tabs: {
@@ -62,14 +64,44 @@ function a11yProps(index) {
     };
 }
 
-export default function VerticalTabs({user}) {
+export default function VerticalTabs({user, updateUser}) {
     const [value, setValue] = useState(0);
     const [adoptions, setAdoptions] = useState([])
     const [loading, setLoading] = useState(true)
-    const [openEditInfoModal, setOpenEditInfoModal] = useState(false)
+    const [values, setValues] = useState({
+        open: false,
+        username: '',
+        firstName: '',
+        lastName: '',
+        city: '',
+        country: '',
+        number: '',
+        street: '',
+        zip: '',
+        email: '',
+        phoneNumber: '',
+        gender: '',
+        date: new Date()
+    });
     const classes = useStyles()
 
-    const handleChange = (event, newValue) => {
+    const genders = [
+        {
+            value: 'FEMALE',
+            label: 'female',
+        },
+        {
+            value: 'MALE',
+            label: 'male',
+        },
+
+        {
+            value: 'OTHER',
+            label: 'other',
+        },
+    ];
+
+    const handleChangeTab = (event, newValue) => {
         setValue(newValue);
     };
 
@@ -103,17 +135,78 @@ export default function VerticalTabs({user}) {
         getAdoptions()
     }, [])
 
-    const handleEditInfo = () => {
-
+    const handleEditInfo = async (e) => {
+        e.preventDefault()
+        console.log(values)
+        const username = values.username
+        const firstName = values.firstName
+        const lastName = values.lastName
+        const phoneNumber = values.phoneNumber
+        const email = values.email
+        const gender = values.gender
+        const city = values.city
+        const country = values.country
+        const number = values.number
+        const street = values.street
+        const zip = values.zip
+        const address = {city: city, country: country, number: number, street: street, zip: zip}
+        const birthDate = new Date(values.date.getFullYear() + '-' + (values.date.getMonth() + 1) + '-' + (values.date.getDate() + 1)).toISOString().substring(0, 10)
+        const data = await axios.patch(`http://localhost:8080/api/visitors/profile-update/${AuthService.getCurrentUser().username}`,
+            {
+                username,
+                address,
+                email,
+                phoneNumber,
+                birthDate,
+                gender,
+                firstName,
+                lastName
+            }, {headers: authHeader()})
+        const resp = data.data
+        AuthService.addUserToLocalStorage(resp)
+        updateUser(resp)
+        handleClose()
     }
 
     const handleOpen = () => {
-        setOpenEditInfoModal(true)
+        values.username = user.username
+        values.email = user.email
+        values.phoneNumber = user.phoneNumber
+        values.gender = user.gender
+        values.date = user.birthDate
+        values.firstName = user.firstName
+        values.lastName = user.lastName
+        if (user.address) {
+            values.zip = user.address.zip
+            values.street = user.address.street
+            values.number = user.address.number
+            values.city = user.address.city
+            values.country = user.address.country
+        }
+
+        setValues({...values, open: true})
     }
 
     const handleClose = () => {
-        setOpenEditInfoModal(false)
+        setValues({...values, open: false})
     }
+
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+        '& .MuiTextField-root': {m: 1, width: '25ch'},
+
+    };
+
+    const handleChange = (prop) => (event) => {
+        setValues({...values, [prop]: event.target.value});
+    };
 
     return (
         <Box sx={{display: 'flex'}}>
@@ -121,7 +214,7 @@ export default function VerticalTabs({user}) {
                 orientation="vertical"
                 variant="scrollable"
                 value={value}
-                onChange={handleChange}
+                onChange={handleChangeTab}
                 aria-label="Vertical tabs example"
                 sx={{borderRight: 1, borderColor: 'divider'}}
                 // TabIndicatorProps={{
@@ -149,172 +242,150 @@ export default function VerticalTabs({user}) {
                             <hr/>
                         </div>
                         {/*edit info modal*/}
-                        <Modal open={openEditInfoModal}
-                               onClose={handleClose}
-                               aria-labelledby="modal-modal-title"
-                               aria-describedby="modal-modal-description"
+                        <Modal
+                            open={values.open}
+                            onClose={handleClose}
+                            aria-labelledby="modal-modal-title-edit"
+                            aria-describedby="modal-modal-description-edit"
                         >
-                            <div
-                                className=" h-full relative min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative items-center"
-                            >
-                                <div className="max-w-md w-full space-y-8 p-10 bg-white rounded-xl shadow-lg z-10">
-                                    <div className="grid  gap-8 grid-cols-1">
-                                        <div className="flex flex-col ">
-                                            <div className="flex flex-col sm:flex-row items-center">
-                                                <h2 className="font-semibold text-lg mr-auto">Edit information</h2>
-                                            </div>
-                                            <div className="mt-3">
-                                                <div className="form">
-                                                    <div className="md:space-y-2 mb-3">
-                                                        <div className="flex items-center py-6">
-                                                            <div
-                                                                className="w-12 h-12 mr-4 flex-none rounded-xl border overflow-hidden">
-                                                                <img className="w-12 h-12 mr-4 object-cover"
-                                                                     src="https://images.unsplash.com/photo-1611867967135-0faab97d1530?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=1352&amp;q=80"
-                                                                     alt="Avatar Upload"/>
-                                                            </div>
-                                                            <label className="cursor-pointer ">
-                                                        <span
-                                                            className="focus:outline-none text-white text-sm py-2 px-4 rounded-full bg-gradient-to-r from-baseForGradient to-textColor text-white hover:from-pink-500 hover:to-orange-500">Browse</span>
-                                                                <input type="file" className="hidden"
-                                                                       multiple='multiple'/>
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                    <div className="md:flex flex-row md:space-x-4 w-full text-xs">
-                                                        <div className="mb-3 space-y-2 w-full text-xs">
-                                                            <label className="font-semibold text-gray-600 py-2">
-                                                                First name <abbr title="required">*</abbr></label>
-                                                            <input placeholder="John"
-                                                                   className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
-                                                                   required="required" type="text"
-                                                                   name="integration[shop_name]"
-                                                                   id="integration_shop_name"/>
-                                                            <p className="text-red text-xs hidden">Please fill out this
-                                                                field.</p>
-                                                        </div>
-                                                        <div className="mb-3 space-y-2 w-full text-xs">
-                                                            <label className="font-semibold text-gray-600 py-2">
-                                                                Last name <abbr title="required">*</abbr></label>
-                                                            <input placeholder="Doe"
-                                                                   className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
-                                                                   required="required" type="text"
-                                                                   name="integration[shop_name]"
-                                                                   id="integration_shop_name"/>
-                                                            <p className="text-red text-xs hidden">Please fill out this
-                                                                field.</p>
-                                                        </div>
-                                                        <div className="mb-3 space-y-2 w-full text-xs">
-                                                            <label
-                                                                className="font-semibold text-gray-600 py-2">Gender<abbr
-                                                                title="required">*</abbr></label>
-                                                            <select
-                                                                className="block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4 md:w-full "
-                                                                required="required" name="integration[city_id]"
-                                                                id="integration_city_id">
-                                                                <option value="">Female</option>
-                                                                <option value="">Male</option>
-                                                                <option value="">Other</option>
-                                                            </select>
-                                                            <p className="text-sm text-red-500 hidden mt-3"
-                                                               id="error">Please
-                                                                fill out this field.</p>
-                                                        </div>
-                                                    </div>
-                                                    <div className="mb-3 space-y-2 w-full text-xs">
-                                                        <label className=" font-semibold text-gray-600 py-2">
-                                                            Facebook address
-                                                        </label>
-                                                        <div
-                                                            className="flex flex-wrap items-stretch w-full mb-4 relative">
-                                                            <div className="flex">
-									<span
-                                        className="flex items-center leading-normal bg-grey-lighter border-1 rounded-r-none border border-r-0 border-blue-300 px-3 whitespace-no-wrap text-grey-dark text-sm w-12 h-10 bg-blue-300 justify-center items-center  text-xl rounded-lg text-white">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none"
-                                         viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                          d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                   </span>
-                                                            </div>
-                                                            <input type="text"
-                                                                   className="flex-shrink flex-grow flex-auto leading-normal w-px flex-1 border border-l-0 h-10 border-grey-light rounded-lg rounded-l-none px-3 relative focus:border-blue focus:shadow"
-                                                                   placeholder="https://"/>
-                                                        </div>
-                                                    </div>
-                                                    <div className="md:flex md:flex-row md:space-x-4 w-full text-xs">
-                                                        <div className="w-full flex flex-col mb-3">
-                                                            <label className="font-semibold text-gray-600 py-2">
-                                                                City</label>
-                                                            <input placeholder="City"
-                                                                   className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
-                                                                   type="text" name="integration[street_address]"
-                                                                   id="integration_street_address"/>
-                                                        </div>
-                                                        <div className="w-full flex flex-col mb-3">
-                                                            <label className="font-semibold text-gray-600 py-2">
-                                                                Country</label>
-                                                            <input placeholder="Country"
-                                                                   className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
-                                                                   type="text" name="integration[street_address]"
-                                                                   id="integration_street_address"/>
-                                                        </div>
-                                                    </div>
-                                                    <div className="md:flex md:flex-row md:space-x-4 w-full text-xs">
-                                                        <div className="w-full flex flex-col mb-3">
-                                                            <label className="font-semibold text-gray-600 py-2">
-                                                                Street</label>
-                                                            <input placeholder="Street"
-                                                                   className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
-                                                                   type="text" name="integration[street_address]"
-                                                                   id="integration_street_address"/>
-                                                        </div>
-                                                        <div className="w-full flex flex-col mb-3">
-                                                            <label className="font-semibold text-gray-600 py-2">
-                                                                Number</label>
-                                                            <input placeholder="Number"
-                                                                   className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
-                                                                   type="text" name="integration[street_address]"
-                                                                   id="integration_street_address"/>
-                                                        </div>
-                                                        <div className="w-full flex flex-col mb-3">
-                                                            <label className="font-semibold text-gray-600 py-2">
-                                                                Zipcode</label>
-                                                            <input placeholder="Zipcode"
-                                                                   className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
-                                                                   type="text" name="integration[street_address]"
-                                                                   id="integration_street_address"/>
-                                                        </div>
-
-                                                    </div>
-
-                                                    <div className="flex-auto w-full mb-1 text-xs space-y-2">
-                                                        <label
-                                                            className="font-semibold text-gray-600 py-2">Biography</label>
-                                                        <textarea required="" name="message" id=""
-                                                                  className="w-full min-h-[100px] max-h-[300px] h-28 appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg  py-4 px-4"
-                                                                  placeholder="Some words about you"
-                                                                  spellCheck="false"></textarea>
-                                                    </div>
-                                                    <div
-                                                        className="mt-5 text-right md:space-x-3 md:block flex flex-col-reverse">
-                                                        <button
-                                                            onClick={handleClose}
-                                                            className="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100"> Cancel
-                                                        </button>
-                                                        <button
-                                                            onClick={handleEditInfo}
-                                                            className="mb-2 md:mb-0 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full bg-gradient-to-r from-baseForGradient to-textColor text-white hover:from-pink-500 hover:to-orange-500">Save
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <Box sx={style} component="form" onSubmit={handleEditInfo}>
+                                <img width='30px' align='left' className="mr-2"/>
+                                <Typography id="modal-modal-title-edit" variant="h6" component="h2" mb='10px'
+                                            fontWeight='600'>
+                                    Update shelter info
+                                </Typography>
+                                    <Grid container spacing={3}>
+                                        <Grid container item xs={6} direction="column">
+                                            <TextField
+                                                label="username"
+                                                id="username"
+                                                sx={{m: 1, width: '50ch'}}
+                                                color="secondary"
+                                                size="small"
+                                                value={values.username}
+                                                onChange={handleChange('username')}
+                                            />
+                                            <TextField
+                                                label="first name"
+                                                id="firstName"
+                                                sx={{m: 1, width: '50ch'}}
+                                                color="secondary"
+                                                size="small"
+                                                value={values.firstName}
+                                                onChange={handleChange('firstName')}
+                                            />
+                                            <TextField
+                                                label="last name"
+                                                id="lastName"
+                                                sx={{m: 1, width: '50ch'}}
+                                                color="secondary"
+                                                size="small"
+                                                value={values.lastName}
+                                                onChange={handleChange('lastName')}
+                                            />
+                                            <TextField
+                                                label="email"
+                                                id="email"
+                                                sx={{m: 1, width: '50ch'}}
+                                                color="secondary"
+                                                size="small"
+                                                value={values.email}
+                                                onChange={handleChange('email')}
+                                            />
+                                            <TextField
+                                                label="phone number"
+                                                id="phoneNumber"
+                                                sx={{m: 1, width: '50ch'}}
+                                                color="secondary"
+                                                size="small"
+                                                value={values.phoneNumber}
+                                                onChange={handleChange('phoneNumber')}
+                                            />
+                                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                                <DatePicker
+                                                    label="Birthdate"
+                                                    value={values.date}
+                                                    onChange={(newValue) => {
+                                                        setValues({...values, ['date']: newValue});
+                                                    }}
+                                                    renderInput={(params) => <TextField {...params} />}
+                                                />
+                                            </LocalizationProvider>
+                                        </Grid>
+                                        <Grid container item xs={6} direction="column">
+                                            <TextField
+                                                label="city"
+                                                id="city"
+                                                sx={{m: 1, width: '50ch'}}
+                                                color="secondary"
+                                                size="small"
+                                                value={values.city}
+                                                onChange={handleChange('city')}
+                                            />
+                                            <TextField
+                                                label="country"
+                                                id="country"
+                                                sx={{m: 1, width: '50ch'}}
+                                                color="secondary"
+                                                size="small"
+                                                value={values.country}
+                                                onChange={handleChange('country')}
+                                            />
+                                            <TextField
+                                                label="number"
+                                                id="number"
+                                                sx={{m: 1, width: '50ch'}}
+                                                color="secondary"
+                                                size="small"
+                                                value={values.number}
+                                                onChange={handleChange('number')}
+                                            />
+                                            <TextField
+                                                label="street"
+                                                id="street"
+                                                sx={{m: 1, width: '50ch'}}
+                                                color="secondary"
+                                                size="small"
+                                                value={values.street}
+                                                onChange={handleChange('street')}
+                                            />
+                                            <TextField
+                                                label="zip"
+                                                id="zip"
+                                                sx={{m: 1, width: '50ch'}}
+                                                color="secondary"
+                                                size="small"
+                                                value={values.zip}
+                                                onChange={handleChange('zip')}
+                                            />
+                                            <FormControl>
+                                                <InputLabel color="secondary" id="select-gender">gender</InputLabel>
+                                                <Select
+                                                    color="secondary"
+                                                    sx={{width: '24.5ch', marginLeft: '7px', marginTop: '6px'}}
+                                                    labelId="select-gender"
+                                                    id="gender"
+                                                    value={values.gender}
+                                                    label="gender"
+                                                    onChange={handleChange('gender')}>
+                                                    {genders.map((gender) => (
+                                                        <MenuItem key={gender.value} value={gender.value}>
+                                                            {gender.label}
+                                                        </MenuItem>
+                                                    ))}
+                                                </Select>
+                                            </FormControl>
+                                        </Grid>
+                                    </Grid>
+                                <button
+                                    type="submit"
+                                    className="mx-40 mt-8 mb-4 py-2 px-14 rounded-full bg-gradient-to-r from-baseForGradient to-textColor text-white hover:from-pink-500 hover:to-orange-500 tracking-widest focus:bg-black transition duration-200">
+                                    Update
+                                </button>
+                            </Box>
                         </Modal>
                         <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row md:space-x-4">
+
                             <div className="form-item w-full">
                                 <label className="text-xl ">Full Name</label>
                                 <input type="text"

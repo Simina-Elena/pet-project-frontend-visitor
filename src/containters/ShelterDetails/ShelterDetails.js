@@ -95,7 +95,7 @@ export default function ShelterDetails(props) {
 
     return (
         <div className="bg-page py-14">
-            <h3 className="text-2xl tracking-widest text-green-600 text-center"></h3>
+            {/*<h3 className="text-2xl tracking-widest text-green-600 text-center"></h3>*/}
             <h1 className="mt-8 text-center text-5xl text-textColor font-bold">Shelter's Information</h1>
             <div className="md:flex md:justify-center md:space-x-8 md:px-14">
                 <div
