@@ -8,6 +8,7 @@ import Homepage from "./containters/Homepage/Homepage";
 import ShelterDetails from "./containters/ShelterDetails/ShelterDetails";
 import ShelterPets from "./containters/ShelterPets/ShelterPets";
 import VisitorProfile from "./containters/VisitorProfile/VisitorProfile";
+import RegisterVisitor from "./containters/RegisterVisitor";
 
 export const userAtom = atom(AuthService.getCurrentUser() !== null);
 export const nameAtom = atom(AuthService.getCurrentUser() !== null ? AuthService.getCurrentUser().username : "");
@@ -19,7 +20,7 @@ export default function App() {
             <Switch>
                 <Route exact path="/login" component={LoginVisitor}/>
                 <Route exact path="/" component={Homepage}/>
-                <Route exact path="/register/visitor" component={Register}/>
+                <Route exact path="/register/visitor" component={RegisterVisitor}/>
                 <Route exact path="/shelter-details" component={ShelterDetails}/>
                 <Route exact path="/shelter-pets/:id" component={ShelterPets}/>
                 <Route exact path="/profile" component={VisitorProfile}/>

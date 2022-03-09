@@ -8,7 +8,7 @@ import {
     InputAdornment,
     InputLabel,
     OutlinedInput,
-    TextField
+    TextField, Typography
 } from "@mui/material";
 import {AuthService} from "pet-project-frontend-sharedcomponents";
 import {Visibility, VisibilityOff} from "@mui/icons-material";
@@ -108,13 +108,11 @@ function LoginVisitor() {
                                             label="Password"
                                         />
                                     </FormControl>
-
-                                    <Button sx={{margin: 'auto', mt: 2, width: 'min-content'}}
-                                            type="submit"
-                                            color="secondary" variant="contained"
-                                    >
+                                    <button
+                                        type="submit"
+                                        className="mx-24 mt-8 mb-4 py-2 px-14 rounded-full bg-gradient-to-r from-baseForGradient to-textColor text-white hover:from-pink-500 hover:to-orange-500 tracking-widest focus:bg-black transition duration-200">
                                         Submit
-                                    </Button>
+                                    </button>
                                 </Box>
                             </form>
                         </div>
