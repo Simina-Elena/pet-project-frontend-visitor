@@ -8,7 +8,7 @@ import Homepage from "./containters/Homepage/Homepage";
 import ShelterDetails from "./containters/ShelterDetails/ShelterDetails";
 import ShelterPets from "./containters/ShelterPets/ShelterPets";
 import VisitorProfile from "./containters/VisitorProfile/VisitorProfile";
-import RegisterVisitor from "./containters/RegisterVisitor";
+import RegisterVisitor from "./containters/RegisterVisitor/RegisterVisitor";
 
 export const userAtom = atom(AuthService.getCurrentUser() !== null);
 export const nameAtom = atom(AuthService.getCurrentUser() !== null ? AuthService.getCurrentUser().username : "");

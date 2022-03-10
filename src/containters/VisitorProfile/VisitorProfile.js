@@ -1,7 +1,7 @@
 import {authHeader, AuthService} from "pet-project-frontend-sharedcomponents";
 import axios from "axios";
 import {useEffect, useState} from "react";
-import VerticalTabs from "../../components/VerticalTabs";
+import VerticalTabs from "../../components/VerticalTabs/VerticalTabs";
 
 export default function VisitorProfile() {
     const [user, setUser] = useState([])
