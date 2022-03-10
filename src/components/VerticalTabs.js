@@ -18,6 +18,8 @@ import {
 import {makeStyles} from "@mui/styles";
 import {DatePicker, LocalizationProvider} from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import * as yup from "yup";
+import {useFormik} from "formik";
 
 const useStyles = makeStyles({
     tabs: {
@@ -30,6 +32,33 @@ const useStyles = makeStyles({
         }
     }
 })
+
+const validationSchema = yup.object({
+    username: yup
+        .string('Enter your username')
+        .max(25, 'Username must not be longer that 25 chars')
+        .required('Username is required'),
+    firstName: yup
+        .string('Enter your first name')
+        .matches(/^[A-Za-z ]*$/, 'Please enter valid name'),
+    lastName: yup
+        .string('Enter your last name')
+        .matches(/^[A-Za-z ]*$/, 'Please enter valid name'),
+    email: yup
+        .string('Enter your email')
+        .email('Enter a valid email')
+        .required('Email is required'),
+    phoneNumber: yup
+        .string('Enter your phone number')
+        .matches(/^(\(\d{3}\)|\d{3})-?\d{3}-?\d{4}$/, 'Please enter valid phone number')
+        .required('Phone number is required'),
+    city: yup
+        .string()
+        .matches(/^[A-Za-z ]*$/, 'Please enter valid name'),
+    country: yup
+        .string()
+        .matches(/^[A-Za-z ]*$/, 'Please enter valid name'),
+});
 
 function TabPanel(props) {
     const {children, value, index, ...other} = props;
@@ -135,38 +164,88 @@ export default function VerticalTabs({user, updateUser}) {
         getAdoptions()
     }, [])
 
-    const handleEditInfo = async (e) => {
-        e.preventDefault()
-        console.log(values)
-        const username = values.username
-        const firstName = values.firstName
-        const lastName = values.lastName
-        const phoneNumber = values.phoneNumber
-        const email = values.email
-        const gender = values.gender
-        const city = values.city
-        const country = values.country
-        const number = values.number
-        const street = values.street
-        const zip = values.zip
-        const address = {city: city, country: country, number: number, street: street, zip: zip}
-        const birthDate = new Date(values.date.getFullYear() + '-' + (values.date.getMonth() + 1) + '-' + (values.date.getDate() + 1)).toISOString().substring(0, 10)
-        const data = await axios.patch(`http://localhost:8080/api/visitors/profile-update/${AuthService.getCurrentUser().username}`,
-            {
-                username,
-                address,
-                email,
-                phoneNumber,
-                birthDate,
-                gender,
-                firstName,
-                lastName
-            }, {headers: authHeader()})
-        const resp = data.data
-        AuthService.addUserToLocalStorage(resp)
-        updateUser(resp)
-        handleClose()
-    }
+    const formik = useFormik({
+        initialValues: {
+            username: values.username,
+            email: values.email,
+            phoneNumber: values.phoneNumber,
+            firstName: values.firstName,
+            lastName: values.lastName,
+            city: values.city,
+            country: values.country,
+            street: values.street,
+            number: values.number,
+            zip: values.zip,
+            gender: values.gender,
+            date: values.date
+        },
+        validationSchema: validationSchema,
+        onSubmit: async (values) => {
+            console.log(values)
+            const username = values.username
+            const firstName = values.firstName
+            const lastName = values.lastName
+            const phoneNumber = values.phoneNumber
+            const email = values.email
+            const gender = values.gender
+            const city = values.city
+            const country = values.country
+            const number = values.number
+            const street = values.street
+            const zip = values.zip
+            const address = {city: city, country: country, number: number, street: street, zip: zip}
+            const birthDate = new Date(values.date.getFullYear() + '-' + (values.date.getMonth() + 1) + '-' + (values.date.getDate() + 1)).toISOString().substring(0, 10)
+            const data = await axios.patch(`http://localhost:8080/api/visitors/profile-update/${AuthService.getCurrentUser().username}`,
+                {
+                    username,
+                    address,
+                    email,
+                    phoneNumber,
+                    birthDate,
+                    gender,
+                    firstName,
+                    lastName
+                }, {headers: authHeader()})
+            const resp = data.data
+            AuthService.addUserToLocalStorage(resp)
+            updateUser(resp)
+            handleClose()
+        },
+    });
+
+
+    // const handleEditInfo = async (e) => {
+    //     e.preventDefault()
+    //     console.log(values)
+    //     const username = values.username
+    //     const firstName = values.firstName
+    //     const lastName = values.lastName
+    //     const phoneNumber = values.phoneNumber
+    //     const email = values.email
+    //     const gender = values.gender
+    //     const city = values.city
+    //     const country = values.country
+    //     const number = values.number
+    //     const street = values.street
+    //     const zip = values.zip
+    //     const address = {city: city, country: country, number: number, street: street, zip: zip}
+    //     const birthDate = new Date(values.date.getFullYear() + '-' + (values.date.getMonth() + 1) + '-' + (values.date.getDate() + 1)).toISOString().substring(0, 10)
+    //     const data = await axios.patch(`http://localhost:8080/api/visitors/profile-update/${AuthService.getCurrentUser().username}`,
+    //         {
+    //             username,
+    //             address,
+    //             email,
+    //             phoneNumber,
+    //             birthDate,
+    //             gender,
+    //             firstName,
+    //             lastName
+    //         }, {headers: authHeader()})
+    //     const resp = data.data
+    //     AuthService.addUserToLocalStorage(resp)
+    //     updateUser(resp)
+    //     handleClose()
+    // }
 
     const handleOpen = () => {
         values.username = user.username
@@ -204,9 +283,9 @@ export default function VerticalTabs({user, updateUser}) {
 
     };
 
-    const handleChange = (prop) => (event) => {
-        setValues({...values, [prop]: event.target.value});
-    };
+    // const handleChange = (prop) => (event) => {
+    //     setValues({...values, [prop]: event.target.value});
+    // };
 
     return (
         <Box sx={{display: 'flex'}}>
@@ -248,7 +327,7 @@ export default function VerticalTabs({user, updateUser}) {
                             aria-labelledby="modal-modal-title-edit"
                             aria-describedby="modal-modal-description-edit"
                         >
-                            <Box sx={style} component="form" onSubmit={handleEditInfo}>
+                            <Box sx={style} component="form" onSubmit={formik.handleSubmit}>
                                 <img width='30px' align='left' className="mr-2"/>
                                 <Typography id="modal-modal-title-edit" variant="h6" component="h2" mb='10px'
                                             fontWeight='600'>
@@ -262,8 +341,10 @@ export default function VerticalTabs({user, updateUser}) {
                                                 sx={{m: 1, width: '50ch'}}
                                                 color="secondary"
                                                 size="small"
-                                                value={values.username}
-                                                onChange={handleChange('username')}
+                                                value={formik.values.username}
+                                                onChange={formik.handleChange}
+                                                error={formik.touched.username && Boolean(formik.errors.username)}
+                                                helperText={formik.touched.username && formik.errors.username}
                                             />
                                             <TextField
                                                 label="first name"
@@ -271,8 +352,10 @@ export default function VerticalTabs({user, updateUser}) {
                                                 sx={{m: 1, width: '50ch'}}
                                                 color="secondary"
                                                 size="small"
-                                                value={values.firstName}
-                                                onChange={handleChange('firstName')}
+                                                value={formik.values.firstName}
+                                                onChange={formik.handleChange}
+                                                error={formik.touched.firstName && Boolean(formik.errors.firstName)}
+                                                helperText={formik.touched.firstName && formik.errors.firstName}
                                             />
                                             <TextField
                                                 label="last name"
@@ -280,8 +363,10 @@ export default function VerticalTabs({user, updateUser}) {
                                                 sx={{m: 1, width: '50ch'}}
                                                 color="secondary"
                                                 size="small"
-                                                value={values.lastName}
-                                                onChange={handleChange('lastName')}
+                                                value={formik.values.lastName}
+                                                onChange={formik.handleChange}
+                                                error={formik.touched.lastName && Boolean(formik.errors.lastName)}
+                                                helperText={formik.touched.lastName && formik.errors.lastName}
                                             />
                                             <TextField
                                                 label="email"
@@ -289,8 +374,10 @@ export default function VerticalTabs({user, updateUser}) {
                                                 sx={{m: 1, width: '50ch'}}
                                                 color="secondary"
                                                 size="small"
-                                                value={values.email}
-                                                onChange={handleChange('email')}
+                                                value={formik.values.email}
+                                                onChange={formik.handleChange}
+                                                error={formik.touched.email && Boolean(formik.errors.email)}
+                                                helperText={formik.touched.email && formik.errors.email}
                                             />
                                             <TextField
                                                 label="phone number"
@@ -298,15 +385,17 @@ export default function VerticalTabs({user, updateUser}) {
                                                 sx={{m: 1, width: '50ch'}}
                                                 color="secondary"
                                                 size="small"
-                                                value={values.phoneNumber}
-                                                onChange={handleChange('phoneNumber')}
+                                                value={formik.values.phoneNumber}
+                                                onChange={formik.handleChange}
+                                                error={formik.touched.phoneNumber && Boolean(formik.errors.phoneNumber)}
+                                                helperText={formik.touched.phoneNumber && formik.errors.phoneNumber}
                                             />
                                             <LocalizationProvider dateAdapter={AdapterDateFns}>
                                                 <DatePicker
                                                     label="Birthdate"
-                                                    value={values.date}
+                                                    value={formik.values.date}
                                                     onChange={(newValue) => {
-                                                        setValues({...values, ['date']: newValue});
+                                                        formik.setFieldValue("date", newValue)
                                                     }}
                                                     renderInput={(params) => <TextField {...params} />}
                                                 />
@@ -319,8 +408,10 @@ export default function VerticalTabs({user, updateUser}) {
                                                 sx={{m: 1, width: '50ch'}}
                                                 color="secondary"
                                                 size="small"
-                                                value={values.city}
-                                                onChange={handleChange('city')}
+                                                value={formik.values.city}
+                                                onChange={formik.handleChange}
+                                                error={formik.touched.city && Boolean(formik.errors.city)}
+                                                helperText={formik.touched.city && formik.errors.city}
                                             />
                                             <TextField
                                                 label="country"
@@ -328,8 +419,10 @@ export default function VerticalTabs({user, updateUser}) {
                                                 sx={{m: 1, width: '50ch'}}
                                                 color="secondary"
                                                 size="small"
-                                                value={values.country}
-                                                onChange={handleChange('country')}
+                                                value={formik.values.country}
+                                                onChange={formik.handleChange}
+                                                error={formik.touched.country && Boolean(formik.errors.country)}
+                                                helperText={formik.touched.country && formik.errors.country}
                                             />
                                             <TextField
                                                 label="number"
@@ -337,8 +430,8 @@ export default function VerticalTabs({user, updateUser}) {
                                                 sx={{m: 1, width: '50ch'}}
                                                 color="secondary"
                                                 size="small"
-                                                value={values.number}
-                                                onChange={handleChange('number')}
+                                                value={formik.values.number}
+                                                onChange={formik.handleChange}
                                             />
                                             <TextField
                                                 label="street"
@@ -346,8 +439,8 @@ export default function VerticalTabs({user, updateUser}) {
                                                 sx={{m: 1, width: '50ch'}}
                                                 color="secondary"
                                                 size="small"
-                                                value={values.street}
-                                                onChange={handleChange('street')}
+                                                value={formik.values.street}
+                                                onChange={formik.handleChange}
                                             />
                                             <TextField
                                                 label="zip"
@@ -355,8 +448,8 @@ export default function VerticalTabs({user, updateUser}) {
                                                 sx={{m: 1, width: '50ch'}}
                                                 color="secondary"
                                                 size="small"
-                                                value={values.zip}
-                                                onChange={handleChange('zip')}
+                                                value={formik.values.zip}
+                                                onChange={formik.handleChange}
                                             />
                                             <FormControl>
                                                 <InputLabel color="secondary" id="select-gender">gender</InputLabel>
@@ -365,9 +458,9 @@ export default function VerticalTabs({user, updateUser}) {
                                                     sx={{width: '24.5ch', marginLeft: '7px', marginTop: '6px'}}
                                                     labelId="select-gender"
                                                     id="gender"
-                                                    value={values.gender}
+                                                    value={formik.values.gender}
                                                     label="gender"
-                                                    onChange={handleChange('gender')}>
+                                                    onChange={formik.handleChange('gender')}>
                                                     {genders.map((gender) => (
                                                         <MenuItem key={gender.value} value={gender.value}>
                                                             {gender.label}
