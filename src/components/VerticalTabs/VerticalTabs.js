@@ -40,10 +40,12 @@ const validationSchema = yup.object({
         .required('Username is required'),
     firstName: yup
         .string('Enter your first name')
-        .matches(/^[A-Za-z ]*$/, 'Please enter valid name'),
+        .matches(/^[A-Za-z ]*$/, 'Please enter valid name')
+        .nullable(),
     lastName: yup
         .string('Enter your last name')
-        .matches(/^[A-Za-z ]*$/, 'Please enter valid name'),
+        .matches(/^[A-Za-z ]*$/, 'Please enter valid name')
+        .nullable(),
     email: yup
         .string('Enter your email')
         .email('Enter a valid email')
@@ -275,7 +277,7 @@ export default function VerticalTabs({user, updateUser}) {
                 <div className="px-4 pt-4">
                     <div className="flex flex-col space-y-1">
                         <div>
-                            <h3 className="text-2xl font-semibold">Basic Information
+                            <h3 className="text-2xl font-semibold font-content">Basic Information
                                 <img onClick={handleOpen}
                                      className="float-right"
                                      width="35px"
@@ -294,7 +296,7 @@ export default function VerticalTabs({user, updateUser}) {
                             <Box sx={style} component="form" onSubmit={formik.handleSubmit}>
                                 <img width='30px' align='left' className="mr-2"/>
                                 <Typography id="modal-modal-title-edit" variant="h6" component="h2" mb='10px'
-                                            fontWeight='600'>
+                                            fontWeight='600' fontFamily='Lora'>
                                     Update visitor info
                                 </Typography>
                                 <Grid container spacing={3}>
@@ -436,7 +438,7 @@ export default function VerticalTabs({user, updateUser}) {
                                 </Grid>
                                 <button
                                     type="submit"
-                                    className="mx-40 mt-8 mb-4 py-2 px-14 rounded-full bg-gradient-to-r from-baseForGradient to-textColor text-white hover:from-pink-500 hover:to-orange-500 tracking-widest focus:bg-black transition duration-200">
+                                    className="font-content font-semibold mx-40 mt-8 mb-4 py-2 px-14 rounded-full bg-gradient-to-r from-baseForGradient to-textColor text-white hover:from-pink-500 hover:to-orange-500 tracking-widest focus:bg-black transition duration-200">
                                     Update
                                 </button>
                             </Box>
@@ -497,7 +499,7 @@ export default function VerticalTabs({user, updateUser}) {
                             </div>
                         </div>
                         <div>
-                            <h3 className="mt-8 text-2xl font-semibold ">More About Me</h3>
+                            <h3 className="mt-8 text-2xl font-semibold font-content">More About Me</h3>
                             <hr/>
                         </div>
                         <div className="form-item w-full">
@@ -507,7 +509,7 @@ export default function VerticalTabs({user, updateUser}) {
                                       disabled>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem natus nobis odio. Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium, eveniet fugiat? Explicabo assumenda dignissimos quisquam perspiciatis corporis sint commodi cumque rem tempora!</textarea>
                         </div>
                         <div>
-                            <h3 className="text-2xl font-semibold">My Social Media</h3>
+                            <h3 className="text-2xl font-semibold font-content">My Social Media</h3>
                             <hr/>
                         </div>
                         <div className="form-item">
@@ -535,7 +537,7 @@ export default function VerticalTabs({user, updateUser}) {
             <TabPanel value={value} index={1}>
                 <div className="px-4 pt-4">
                     <div>
-                        <h3 className="text-2xl font-semibold">Accepted adoptions</h3>
+                        <h3 className="text-2xl font-semibold font-content">Accepted adoptions</h3>
                         <hr/>
                     </div>
                     <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row md:space-x-4">

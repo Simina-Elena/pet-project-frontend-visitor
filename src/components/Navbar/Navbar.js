@@ -31,9 +31,9 @@ const useStyles = makeStyles((theme) => ({
             backgroundColor: '#17c3b2',
             color: '#227c9d',
         },
-        fontFamily: 'Nunito',
+        fontFamily: 'Lora',
         color: '#fff',
-        fontWeight: 'bold',
+        fontWeight: '600',
         fontSize: 'large'
     },
     hover: {
@@ -71,7 +71,7 @@ export default function Navbar() {
                             <MenuIcon/>
                         </IconButton>
 
-                        <Typography fontWeight="bold" fontFamily="Nunito" variant="h4" component="div"
+                        <Typography fontWeight="600" fontFamily="Lora" variant="h4" component="div"
                                     sx={{flexGrow: 1}}>
                             <Link to={{pathname: '/'}} className={classes.hover}>
                                 <span className={classes.colorText}> Pet</span>Hugs
@@ -83,9 +83,9 @@ export default function Navbar() {
                                     <Button sx={{'&:hover': {
                                             backgroundColor: '#17c3b2',
                                             color: '#227c9d',
-                                        }, fontFamily: 'Nunito',
+                                        }, fontFamily: 'Lora',
                                         color: '#fff',
-                                        fontWeight: 'bold',
+                                        fontWeight: '600',
                                         fontSize: 'medium'}} onClick={() => history.push('/profile')}>
                                         Profile
                                     </Button>
@@ -93,9 +93,9 @@ export default function Navbar() {
                                             backgroundColor: '#17c3b2',
                                             color: '#227c9d',
                                         },
-                                        fontFamily: 'Nunito',
+                                        fontFamily: 'Lora',
                                         color: '#fff',
-                                        fontWeight: 'bold',
+                                        fontWeight: '600',
                                         fontSize: 'medium'}} onClick={handleLogOut}>
                                         Log out
                                     </Button>

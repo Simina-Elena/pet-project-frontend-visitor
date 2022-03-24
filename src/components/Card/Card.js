@@ -2,30 +2,21 @@ import {authHeader, AuthService} from "pet-project-frontend-sharedcomponents";
 import axios from "axios";
 import {useEffect, useState} from "react";
 import {Link, useHistory} from "react-router-dom";
+import ShelterImage from '../ShelterImage/ShelterImage'
 
 export default function Card(props) {
     const shelters = props.shelters
-    const [sheltersActivities, setSheltersActivities] = useState([])
 
     const history = useHistory()
-    // shelters.map(async (shelter) => {
-    //     const data = await axios.get(`http://localhost:8080/api/activities?shelterId=${shelter.id}`
-    //         , {
-    //             headers: authHeader()
-    //         })
-    //     setSheltersActivities(data.data)
-    // })
-    
+
     return (
         shelters.map((shelter) => {
             return <section className="text-gray-900 body-font overflow-hidden">
                 <div className="container px-5 py-24 mx-auto">
                     <div key={shelter.id} className="lg:w-4/5 mx-auto flex flex-wrap">
-                        <img alt="ecommerce"
-                             className="lg:w-1/3 w-full lg:h-auto h-64 object-cover object-center rounded"
-                             src="https://source.unsplash.com/400x400/?nature,water"/>
+                        <ShelterImage id={shelter.id}/>
                         <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
-                            <h1 className="text-textColor text-3xl title-font font-medium mb-1">{shelter.username}</h1>
+                            <h1 className="text-textColor text-3xl title-font font-content font-semibold mb-1">{shelter.username}</h1>
                             <div className="flex mb-4">
             <span className="flex items-center">
               <svg fill="currentColor" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"
@@ -111,12 +102,12 @@ export default function Card(props) {
                                 {/*                </div>*/}
                             </div>
                             <div className="flex">
-                                <button className="flex ml-auto text-white bg-gradient-to-r from-baseForGradient to-textColor border-0 py-2 px-6 mr-32 focus:outline-none hover:from-pink-500 hover:to-orange-500 rounded"
+                                <button className="font-content font-semibold flex ml-auto text-white bg-gradient-to-r from-baseForGradient to-textColor border-0 py-2 px-6 mr-32 focus:outline-none hover:from-pink-500 hover:to-orange-500 rounded"
                                         onClick={() => history.push(`/shelter-pets/${shelter.id}`)}
                                 >View pets</button>
                                 <Link to={{pathname: '/shelter-details', state: shelter}}>
                                 <button
-                                    className="flex ml-auto text-white bg-gradient-to-r from-baseForGradient to-textColor border-0 py-2 px-6 focus:outline-none hover:from-pink-500 hover:to-orange-500 rounded"
+                                    className="font-content font-semibold flex ml-auto text-white bg-gradient-to-r from-baseForGradient to-textColor border-0 py-2 px-6 focus:outline-none hover:from-pink-500 hover:to-orange-500 rounded"
                                 >View details
                                 </button>
                                 </Link>

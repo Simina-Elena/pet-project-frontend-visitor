@@ -3,6 +3,7 @@ import {CssBaseline} from "@mui/material";
 import Card from "../../components/Card/Card";
 import {useEffect, useState} from "react";
 import axios from "axios";
+import {authHeader, AuthService} from "pet-project-frontend-sharedcomponents";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -10,13 +11,6 @@ const useStyles = makeStyles((theme) => ({
         background: '#fef9ef',
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
-
-    },
-    choices: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontFamily: 'Nunito'
 
     },
     appbar: {
@@ -44,8 +38,10 @@ const useStyles = makeStyles((theme) => ({
     },
     title: {
         color: '#fe6d73',
-        fontSize: '4.5rem',
-        paddingRight: '30px'
+        fontSize: '3.5rem',
+        paddingRight: '30px',
+        fontFamily: 'Lora',
+        fontWeight: '400'
 
     },
     goDown: {
@@ -58,6 +54,7 @@ export default function Homepage() {
     const classes = useStyles()
     const [shelters, setShelters] = useState([])
     const [loading, setLoading] = useState(true)
+    const [photo, setPhotos] = useState([])
 
     const fetchShelters = async () => {
         const data = await axios.get('http://localhost:8080/api/shelter/list')
@@ -65,6 +62,7 @@ export default function Homepage() {
         setShelters(resp)
         setLoading(false)
     }
+
     useEffect(() => {
         fetchShelters()
     }, [])

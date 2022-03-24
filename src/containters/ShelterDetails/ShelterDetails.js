@@ -1,6 +1,6 @@
 import axios from "axios";
 import {useEffect, useState} from "react";
-import {Box, Button, FormControl, InputLabel, MenuItem, Modal, Select, TextField, Typography} from "@mui/material";
+import {Box, FormControl, InputLabel, MenuItem, Modal, Select, TextField, Typography} from "@mui/material";
 
 
 export default function ShelterDetails(props) {
@@ -96,7 +96,7 @@ export default function ShelterDetails(props) {
     return (
         <div className="bg-page py-14">
             {/*<h3 className="text-2xl tracking-widest text-green-600 text-center"></h3>*/}
-            <h1 className="mt-8 text-center text-5xl text-textColor font-bold">Shelter's Information</h1>
+            <h1 className="font-content font-semibold mt-8 text-center text-5xl text-textColor">Shelter's Information</h1>
             <div className="md:flex md:justify-center md:space-x-8 md:px-14">
                 <div
                     className="mt-16 py-4 px-4 bg-whit w-72 bg-white rounded-xl shadow-lg hover:shadow-xl transform hover:scale-110 transition duration-500 mx-auto md:mx-0">
@@ -105,7 +105,7 @@ export default function ShelterDetails(props) {
                              src="https://img.freepik.com/free-vector/dog-walking-concept-illustration_114360-3169.jpg?w=740"
                              alt=""/>
                         <div className="mt-4 text-green-600 text-center">
-                            <h1 className="text-xl text-textColor font-bold">Activities</h1>
+                            <h1 className="text-xl text-textColor font-content font-semibold">Activities</h1>
                             {activities.length > 0 ? (activities.map((activity) =>
                                 <p className="mt-4 text-gray-600">
                                     <ul className="leading-relaxed">
@@ -115,7 +115,7 @@ export default function ShelterDetails(props) {
                                 </p>
                             )) : (<p className="mt-4 text-gray-600">No activities yet</p>)}
                             <button
-                                className="mt-8 mb-4 py-2 px-14 rounded-full bg-gradient-to-r from-baseForGradient to-textColor text-white hover:from-pink-500 hover:to-orange-500 tracking-widest focus:bg-black transition duration-200">Booking
+                                className="font-content font-semibold mt-8 mb-4 py-2 px-14 rounded-full bg-gradient-to-r from-baseForGradient to-textColor text-white hover:from-pink-500 hover:to-orange-500 tracking-widest focus:bg-black transition duration-200">Booking
                             </button>
                         </div>
                     </div>
@@ -128,7 +128,7 @@ export default function ShelterDetails(props) {
                              src="https://img.freepik.com/free-vector/pet-location-icon-with-paw-print_1284-42578.jpg?w=740"
                              alt=""/>
                         <div className="mt-4 text-green-600 text-center">
-                            <h1 className="text-xl text-textColor font-bold">Address</h1>
+                            <h1 className="text-xl text-textColor font-content font-semibold">Address</h1>
                             {shelter.address !== null ? (<p className="mt-4 text-gray-600">
                                     <ul>
                                         <li>City: {shelter.address.city}</li>
@@ -140,7 +140,7 @@ export default function ShelterDetails(props) {
                                 </p>) :
                                 <p className="mt-4 text-gray-600">No address yet</p>}
                             <button
-                                className="mt-8 mb-4 py-2 px-14 rounded-full bg-gradient-to-r from-baseForGradient to-textColor text-white tracking-widest hover:from-pink-500 hover:to-orange-500 transition duration-200">View
+                                className="font-content font-semibold mt-8 mb-4 py-2 px-14 rounded-full bg-gradient-to-r from-baseForGradient to-textColor text-white tracking-widest hover:from-pink-500 hover:to-orange-500 transition duration-200">View
                                 on map
                             </button>
                         </div>
@@ -154,7 +154,7 @@ export default function ShelterDetails(props) {
                              src="https://images01.nicepage.com/c461c07a441a5d220e8feb1a/8cc47b39e719570b996d9879/dsds.jpg"
                              alt=""/>
                         <div className="mt-4 text-green-600 text-center">
-                            <h1 className="text-xl text-textColor font-bold">Contact</h1>
+                            <h1 className="text-xl text-textColor font-content font-semibold">Contact</h1>
                             <p className="mt-4 text-gray-600">
                                 <ul className="leading-relaxed">
                                     <li><img className='inline' width='40px'
@@ -171,8 +171,8 @@ export default function ShelterDetails(props) {
                             </p>
                             <button
                                 onClick={handleOpen}
-                                className="mt-8 mb-4 py-2 px-14 rounded-full bg-gradient-to-r from-baseForGradient to-textColor text-white tracking-widest hover:from-pink-500 hover:to-orange-500 transition duration-200">Give
-                                a pet
+                                className="font-content font-semibold mt-8 mb-4 py-2 px-14 rounded-full bg-gradient-to-r from-baseForGradient to-textColor text-white tracking-widest hover:from-pink-500 hover:to-orange-500 transition duration-200">Leave review
+
                             </button>
                             {/*add pet modal*/}
                             <Modal
@@ -243,7 +243,7 @@ export default function ShelterDetails(props) {
                                             value={values.color}
                                             onChange={handleChange('color')}
                                         />
-                                        <button type='submit' className='mt-4 text-xl w-1/2 text-white py-2 rounded-xl shadow-lg bg-gradient-to-r from-baseForGradient to-textColor hover:from-pink-500 hover:to-orange-500'>
+                                        <button type='submit' className='font-content font-semibold mt-4 text-xl w-1/2 text-white py-2 rounded-xl shadow-lg bg-gradient-to-r from-baseForGradient to-textColor hover:from-pink-500 hover:to-orange-500'>
                                             Submit
                                         </button>
                                     </Box>
