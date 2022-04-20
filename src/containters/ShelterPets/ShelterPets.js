@@ -41,7 +41,7 @@ export default function ShelterPets() {
         if (error) {
             addToast(error.message, {appearance: 'error', autoDismiss: true});
         } else {
-            addToast('Adoption request sent', {appearance: 'success', autoDismiss: true})
+            addToast('Adoption request sent', {appearance: 'info', autoDismiss: true})
         }
     }
 
