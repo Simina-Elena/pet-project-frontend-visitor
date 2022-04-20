@@ -20,6 +20,7 @@ import {DatePicker, LocalizationProvider} from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import * as yup from "yup";
 import {useFormik} from "formik";
+import FetchData from "../fetchDataApi";
 
 const useStyles = makeStyles({
     tabs: {
@@ -55,11 +56,9 @@ const validationSchema = yup.object({
         .matches(/^(\(\d{3}\)|\d{3})-?\d{3}-?\d{4}$/, 'Please enter valid phone number')
         .required('Phone number is required'),
     city: yup
-        .string()
-        .matches(/^[A-Za-z ]*$/, 'Please enter valid name'),
+        .string(),
     country: yup
         .string()
-        .matches(/^[A-Za-z ]*$/, 'Please enter valid name'),
 });
 
 function TabPanel(props) {
@@ -99,6 +98,7 @@ export default function VerticalTabs({user, updateUser}) {
     const [value, setValue] = useState(0);
     const [adoptions, setAdoptions] = useState([])
     const [loading, setLoading] = useState(true)
+    const [apiCountries, setApiCountries] = useState([])
     const [values, setValues] = useState({
         open: false,
         username: '',
@@ -164,6 +164,7 @@ export default function VerticalTabs({user, updateUser}) {
 
     useEffect(() => {
         getAdoptions()
+        setApiCountries(FetchData.fetchCountries)
     }, [])
 
     const formik = useFormik({
@@ -379,17 +380,34 @@ export default function VerticalTabs({user, updateUser}) {
                                             error={formik.touched.city && Boolean(formik.errors.city)}
                                             helperText={formik.touched.city && formik.errors.city}
                                         />
-                                        <TextField
-                                            label="country"
-                                            id="country"
-                                            sx={{m: 1, width: '50ch'}}
-                                            color="secondary"
-                                            size="small"
-                                            value={formik.values.country}
-                                            onChange={formik.handleChange}
-                                            error={formik.touched.country && Boolean(formik.errors.country)}
-                                            helperText={formik.touched.country && formik.errors.country}
-                                        />
+                                        <FormControl>
+                                            <InputLabel color="secondary" id="select-country">country</InputLabel>
+                                            <Select
+                                                color="secondary"
+                                                sx={{width: '24ch', m: 1}}
+                                                labelId="select-country"
+                                                id="country"
+                                                value={formik.values.country}
+                                                label="country"
+                                                onChange={formik.handleChange('country')}>
+                                                {apiCountries.map((country) => (
+                                                    <MenuItem value={country.name}>
+                                                        {country.name}
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                        {/*<TextField*/}
+                                        {/*    label="country"*/}
+                                        {/*    id="country"*/}
+                                        {/*    sx={{m: 1, width: '50ch'}}*/}
+                                        {/*    color="secondary"*/}
+                                        {/*    size="small"*/}
+                                        {/*    value={formik.values.country}*/}
+                                        {/*    onChange={formik.handleChange}*/}
+                                        {/*    error={formik.touched.country && Boolean(formik.errors.country)}*/}
+                                        {/*    helperText={formik.touched.country && formik.errors.country}*/}
+                                        {/*/>*/}
                                         <TextField
                                             label="number"
                                             id="number"

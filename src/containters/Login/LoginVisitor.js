@@ -70,7 +70,7 @@ function LoginVisitor() {
                     </div>
                     <div className="flex items-center justify-center object-center p-6 sm:p-12 md:w-1/2">
                         <div className="w-full ">
-                            <h1 className="mb-4 text-2xl font-bold text-center text-gray-700">
+                            <h1 className="font-content font-semibold mb-4 text-2xl text-center text-gray-700">
                                 Login
                             </h1>
                             <form onSubmit={onFinishRegister}>
@@ -79,14 +79,13 @@ function LoginVisitor() {
                                         label="Username"
                                         id="username"
                                         sx={{m: 1, width: '50ch'}}
-                                        color="secondary"
                                         size="small"
                                         value={values.username}
                                         onChange={handleChange('username')}
 
                                     />
                                     <FormControl size="small" sx={{m: 1, width: '50ch'}} variant="outlined"
-                                                 color="secondary">
+                                                >
                                         <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                                         <OutlinedInput
                                             id="outlined-adornment-password"
@@ -110,7 +109,7 @@ function LoginVisitor() {
                                     </FormControl>
                                     <button
                                         type="submit"
-                                        className="mx-24 mt-8 mb-4 py-2 px-14 rounded-full bg-gradient-to-r from-baseForGradient to-textColor text-white hover:from-pink-500 hover:to-orange-500 tracking-widest focus:bg-black transition duration-200">
+                                        className="font-content font-semibold mx-24 mt-8 mb-4 py-2 px-14 rounded-full bg-gradient-to-r from-baseForGradient to-textColor text-white hover:from-pink-500 hover:to-orange-500 tracking-widest focus:bg-black transition duration-200">
                                         Submit
                                     </button>
                                 </Box>

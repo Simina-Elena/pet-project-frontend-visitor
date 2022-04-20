@@ -15,6 +15,7 @@ import {Visibility, VisibilityOff} from "@mui/icons-material";
 import * as React from "react";
 import * as yup from 'yup'
 import {useFormik} from "formik";
+import {useToasts} from "react-toast-notifications";
 
 const validationSchema = yup.object({
     username: yup
@@ -41,6 +42,7 @@ const validationSchema = yup.object({
 });
 
 function RegisterVisitor() {
+    const {addToast} = useToasts()
     const [values, setValues] = useState({
         username: '',
         email: '',
@@ -67,7 +69,12 @@ function RegisterVisitor() {
             let email = values.email;
             let phoneNumber = values.phoneNumber
             let user = {username, password, email, phoneNumber};
-            await AuthService.registerVisitor(user)
+            const {error} = await AuthService.registerVisitor(user)
+            if (error) {
+                addToast(error.message, {appearance: 'error', autoDismiss: true});
+            } else {
+                addToast('Account created', {appearance: 'success', autoDismiss: true})
+            }
             history.push("/login")
         },
     });
@@ -114,7 +121,7 @@ function RegisterVisitor() {
                     <div className="flex items-center justify-center p-6 sm:p-12 md:w-1/2">
                         <div className="w-full">
 
-                            <h1 className="mb-4 text-2xl font-bold text-center text-gray-700">
+                            <h1 className="mb-4 text-2xl font-content font-semibold text-center text-gray-700">
                                 Register
                             </h1>
                             <form onSubmit={formik.handleSubmit}>
@@ -123,7 +130,6 @@ function RegisterVisitor() {
                                         label="Username"
                                         id="username"
                                         sx={{m: 1, width: '50ch'}}
-                                        color="secondary"
                                         size="small"
                                         value={formik.values.username}
                                         onChange={formik.handleChange}
@@ -134,15 +140,13 @@ function RegisterVisitor() {
                                         label="Email"
                                         id="email"
                                         sx={{m: 1, width: '50ch'}}
-                                        color="secondary"
                                         size="small"
                                         value={formik.values.email}
                                         onChange={formik.handleChange}
                                         error={formik.touched.email && Boolean(formik.errors.email)}
                                         helperText={formik.touched.email && formik.errors.email}
                                     />
-                                    <FormControl size="small" sx={{m: 1, width: '50ch'}} variant="outlined"
-                                                 color="secondary">
+                                    <FormControl size="small" sx={{m: 1, width: '50ch'}} variant="outlined">
                                         <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                                         <OutlinedInput
                                             id="outlined-adornment-password"
@@ -166,8 +170,7 @@ function RegisterVisitor() {
                                         />
                                         <FormHelperText sx={{color: '#d32f2f'}}>{formik.touched.password && formik.errors.password}</FormHelperText>
                                     </FormControl>
-                                    <FormControl size="small" sx={{m: 1, width: '50ch'}} variant="outlined"
-                                                 color="secondary">
+                                    <FormControl size="small" sx={{m: 1, width: '50ch'}} variant="outlined">
                                         <InputLabel htmlFor="outlined-adornment-password">Confirm password</InputLabel>
                                         <OutlinedInput
                                             id="outlined-adornment-confirmPassword"
@@ -195,7 +198,6 @@ function RegisterVisitor() {
                                         label="Phone number"
                                         id="phoneNumber"
                                         sx={{m: 1, width: '50ch'}}
-                                        color="secondary"
                                         size="small"
                                         value={formik.values.phoneNumber}
                                         onChange={formik.handleChange}
@@ -204,7 +206,7 @@ function RegisterVisitor() {
                                     />
                                     <button
                                         type="submit"
-                                        className="mx-24 mt-8 mb-4 py-2 px-14 rounded-full bg-gradient-to-r from-baseForGradient to-textColor text-white hover:from-pink-500 hover:to-orange-500 tracking-widest focus:bg-black transition duration-200">
+                                        className="font-content font-semibold mx-24 mt-8 mb-4 py-2 px-14 rounded-full bg-gradient-to-r from-baseForGradient to-textColor text-white hover:from-pink-500 hover:to-orange-500 tracking-widest focus:bg-black transition duration-200">
                                         Submit
                                     </button>
                                 </Box>

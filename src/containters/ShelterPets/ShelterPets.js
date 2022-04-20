@@ -3,11 +3,13 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import {authHeader, AuthService} from "pet-project-frontend-sharedcomponents";
 import PetImage from "../../components/PetImage/PetImage";
+import {useToasts} from "react-toast-notifications";
 
 export default function ShelterPets() {
     const shelterId = useParams().id
     const [pets, setPets] = useState([])
     const [loading, setLoading] = useState(true)
+    const {addToast} = useToasts()
     const getPets = async () => {
         const data = await axios.get(`http://localhost:8080/api/pet/list/${shelterId}`,
             {headers: authHeader()})
@@ -28,7 +30,6 @@ export default function ShelterPets() {
         }
     }
 
-
     useEffect(() => {
         getPets()
     }, [])
@@ -36,11 +37,13 @@ export default function ShelterPets() {
 
     const handleAdopt = async (petId) => {
         const visitorId = AuthService.getCurrentUser().id
-        await axios.post(`http://localhost:8080/api/adoptions`, {petId, visitorId}, {headers: authHeader()})
-        console.log(petId)
-        console.log(visitorId)
+        const {error} = await axios.post(`http://localhost:8080/api/adoptions`, {petId, visitorId}, {headers: authHeader()})
+        if (error) {
+            addToast(error.message, {appearance: 'error', autoDismiss: true});
+        } else {
+            addToast('Adoption request sent', {appearance: 'success', autoDismiss: true})
+        }
     }
-
 
     if (loading === true)
         return (<div>Loading...</div>)

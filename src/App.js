@@ -9,6 +9,7 @@ import ShelterDetails from "./containters/ShelterDetails/ShelterDetails";
 import ShelterPets from "./containters/ShelterPets/ShelterPets";
 import VisitorProfile from "./containters/VisitorProfile/VisitorProfile";
 import RegisterVisitor from "./containters/RegisterVisitor/RegisterVisitor";
+import {ToastProvider} from "react-toast-notifications";
 
 export const userAtom = atom(AuthService.getCurrentUser() !== null);
 export const nameAtom = atom(AuthService.getCurrentUser() !== null ? AuthService.getCurrentUser().username : "");
@@ -16,6 +17,7 @@ export const shelterAtom = atom({})
 
 export default function App() {
     return (
+        <ToastProvider placement={'top-right'}>
         <Layout>
             <Switch>
                 <Route exact path="/login" component={LoginVisitor}/>
@@ -25,6 +27,8 @@ export default function App() {
                 <Route exact path="/shelter-pets/:id" component={ShelterPets}/>
                 <Route exact path="/profile" component={VisitorProfile}/>
             </Switch>
-        </Layout>)
+        </Layout>
+        </ToastProvider>
+    )
 
 }
